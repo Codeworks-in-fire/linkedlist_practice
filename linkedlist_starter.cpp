@@ -55,9 +55,15 @@ void printList(Node *head)
  * @return int Number of nodes in the list.
  */
 int getLength(Node *head)
-{
+{   
+    int length = 0;
+    Node *current = head;
+    while (current != nullptr) {
+        length ++;
+        current = current -> next;
+    }
     // TODO
-    return 0;
+    return length;
 }
 
 /**
@@ -69,6 +75,9 @@ int getLength(Node *head)
 void insertAtFront(Node *&head, int value)
 {
     // TODO
+    Node *tmp = new Node(value);
+    tmp -> next = head;
+    head = tmp;
 }
 
 /**
@@ -79,7 +88,17 @@ void insertAtFront(Node *&head, int value)
  */
 void insertAtEnd(Node *&head, int value)
 {
-    // TODO
+    Node *current = head;
+    Node *newNode = new Node(value);
+    if (head == nullptr) {
+        head = newNode;
+        return;
+    }
+    while (current -> next != nullptr) {
+        current = current -> next;
+    }
+    current->next = newNode;
+    return;
 }
 /**
  * Runs the linked-list test cases.
@@ -97,6 +116,26 @@ void insertAtEnd(Node *&head, int value)
 void insertAtPosition(Node *&head, int value, int position)
 {
     // TODO
+    if (position <= 1) {
+        Node *tmp = new Node(value);
+        tmp->next = head;
+        head = tmp;
+        return;
+    }
+
+    Node *current = head;
+    for (int i = 0; i < position - 1 && current -> next != nullptr; i++) {
+        current = current->next;
+    }
+
+    if (current -> next == nullptr) {
+        current -> next = new Node(value);
+        return;
+    }
+    Node *tmp = new Node(value);
+    tmp->next = current->next;
+    current->next = tmp;
+     
 }
 
 /**
@@ -108,6 +147,12 @@ void insertAtPosition(Node *&head, int value, int position)
 bool search(Node *head, int value)
 {
     // TODO
+    while (head != nullptr) {
+        if (head -> data == value) {
+            return true;
+        }
+        head = head -> next;
+    }
     return false;
 }
 
@@ -119,7 +164,14 @@ bool search(Node *head, int value)
  * @return void
  */
 void deleteFront(Node *&head)
-{
+{   
+    if (head == nullptr) {
+        delete head;
+        return ;
+    }
+    Node *current = head;
+    head = head -> next;
+    delete current;
     // TODO
 }
 
@@ -129,7 +181,20 @@ void deleteFront(Node *&head)
  * @return void
  */
 void deleteEnd(Node *&head)
-{
+{   
+    Node* current = head;
+    if (head == nullptr) {
+        return;
+    }
+    if (head -> next == nullptr) {
+        delete head;
+        return;
+    }
+    while (current -> next -> next != nullptr) {
+        current = current -> next;
+    }
+    delete current->next;
+    current  -> next = nullptr;
     // TODO
 }
 
@@ -142,6 +207,33 @@ void deleteEnd(Node *&head)
 bool deleteValue(Node *&head, int value)
 {
     // TODO
+    if (head == nullptr) {
+        return false;
+    }
+    Node* current = head;
+    if (current -> data == value) {
+        if (current -> next == nullptr) {
+            delete head;
+            return true;
+        }
+        head = head -> next;
+        delete current;
+        return true;
+    }
+    while(current -> next != nullptr) {
+        if (current -> next -> data == value) {
+            if(current -> next -> next == nullptr) {
+                delete current -> next;
+                current -> next = nullptr;
+            } else {
+                Node *p1 = current -> next;
+                current -> next = current -> next -> next;
+                delete p1;
+            }
+            return true;
+        }
+        current = current -> next;
+    }
     return false;
 }
 
@@ -155,6 +247,20 @@ bool deleteValue(Node *&head, int value)
 void removeDuplicates(Node *head)
 {
     // TODO
+    Node *p2 = head;
+    while (head -> next != nullptr) {
+        while (p2 -> next != nullptr) {
+            if (head -> data == p2 ->next -> data){
+                Node *tmp = p2 -> next;
+                p2 -> next = tmp -> next;
+                delete tmp;
+            } else {
+                p2 = p2 -> next;
+            }
+        }
+        head = head-> next;
+        p2 = head;
+    }
 }
 
 /**
@@ -163,8 +269,15 @@ void removeDuplicates(Node *head)
  * @return void
  */
 void reverseList(Node *&head)
-{
-    // TODO
+{   
+    // Node* current = head;
+    // while(head != nullptr) {
+    //     Node *tmp = new Node(head -> data);
+    //     tmp -> next = current;
+    //     current = tmp;
+        
+    // }
+    // //TODO
 }
 
 /**
@@ -175,7 +288,16 @@ void reverseList(Node *&head)
 int findMiddle(Node *head)
 {
     // TODO
-    return -1;
+    if (head == nullptr) {
+        return -1;
+    }
+    Node* current = head;
+    while (head!= nullptr && head -> next != nullptr) {
+        head = head -> next -> next; 
+        current = current -> next;
+
+    }
+    return current -> data;
 }
 
 /**
@@ -186,7 +308,12 @@ int findMiddle(Node *head)
 int sumList(Node *head)
 {
     // TODO
-    return 0;
+    int sum = 0;
+    while (head != nullptr) {
+        sum += head -> data;
+        head = head -> next;
+    }
+    return sum;
 }
 
 /**
@@ -195,7 +322,12 @@ int sumList(Node *head)
  * @return void
  */
 void clearList(Node *&head)
-{
+{   
+    while (head != nullptr) {
+        Node *current = head;
+        head = head -> next;
+        delete current;
+    }
     // TODO
 }
 
