@@ -270,14 +270,19 @@ void removeDuplicates(Node *head)
  */
 void reverseList(Node *&head)
 {   
-    // Node* current = head;
-    // while(head != nullptr) {
-    //     Node *tmp = new Node(head -> data);
-    //     tmp -> next = current;
-    //     current = tmp;
-        
-    // }
-    // //TODO
+    Node* current = head;
+    head = head -> next;
+    current -> next = nullptr;
+    while(head != nullptr) {
+        Node *tmp = new Node(head -> data);
+        tmp -> next = current;
+        current = tmp;
+        tmp = head; 
+        head = head -> next;
+        delete tmp;
+    }
+    head = current;
+    //TODO
 }
 
 /**
